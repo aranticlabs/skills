@@ -1,63 +1,88 @@
 <div align="center">
     <picture>
         <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/aranticlabs/arantic-docs/main/static/img/brand/arantic-logo-dark.svg" />
-        <img src="https://raw.githubusercontent.com/aranticlabs/arantic-docs/main/static/img/brand/arantic-logo-light.svg" width="400" alt="Arantic Skills" />
+        <img src="https://raw.githubusercontent.com/aranticlabs/arantic-docs/main/static/img/brand/arantic-logo-light.svg" width="400" alt="Agentic Engineering" />
     </picture><br /><br />
-    <p>A library of Claude Code skills from Arantic Labs.<br />
-    Reusable, ready-to-install skills for planning, specs, reviews, and AI-assisted development workflows.</p>
+    <p>A library of agents and skills from Arantic Labs.<br />
+    Reusable, ready-to-install agents and skills for planning, specs, reviews, and AI-assisted development workflows.</p>
 </div>
 
-# Arantic Skills
+# Agentic Engineering
 
-A curated collection of [Claude Code](https://docs.claude.com/en/docs/claude-code) skills built and maintained by Arantic Labs. Each skill is a self-contained directory with a `SKILL.md` file that Claude Code can load to extend its capabilities with domain-specific workflows.
+A curated collection of [Claude Code](https://docs.claude.com/en/docs/claude-code) **agents** and **skills** built and maintained by Arantic Labs. Agents are specialized subagents Claude Code can delegate work to; skills are self-contained workflows Claude Code can load to extend its capabilities with domain-specific instructions.
 
 ## What's inside
 
-Skills will be added here over time. Each skill lives in its own directory at the root of this repo.
+- **`Agents/`** — Specialized subagent definitions (e.g. `system-architect`, `security-auditor`, `debug-detective`, `test-engineer`, `ux-ui-designer`). Each agent is a single Markdown file with frontmatter describing when Claude Code should delegate to it.
+- **`Skills/`** — Self-contained skill directories (e.g. `write-prd`, `dead-code-scanner`, `Typescript`). Each skill ships a `SKILL.md` that Claude Code loads on demand.
+
+More agents and skills will be added over time.
 
 ---
 
-## Installing a skill
+## Installing
 
-Skills can be installed at the **user level** (available in every project) or at the **project level** (scoped to a single repo).
+Both agents and skills can be installed at the **user level** (available in every project) or at the **project level** (scoped to a single repo).
 
-### User-level (global)
+### Skills
+
+User-level (global):
 
 ```bash
-git clone https://github.com/aranticlabs/skills.git
-cp -r skills/<skill-name> ~/.claude/skills/
+git clone https://github.com/aranticlabs/agentic-engineering.git
+cp -r agentic-engineering/Skills/<skill-name> ~/.claude/skills/
 ```
 
-The skill is now available in every Claude Code session as `/<skill-name>`.
-
-### Project-level
+Project-level:
 
 ```bash
 mkdir -p .claude/skills
-cp -r /path/to/skills/<skill-name> .claude/skills/
+cp -r /path/to/agentic-engineering/Skills/<skill-name> .claude/skills/
 ```
 
-The skill is available only inside this project, and can be committed alongside your code.
+### Agents
+
+User-level (global):
+
+```bash
+mkdir -p ~/.claude/agents
+cp agentic-engineering/Agents/<agent-name>.md ~/.claude/agents/
+```
+
+Project-level:
+
+```bash
+mkdir -p .claude/agents
+cp /path/to/agentic-engineering/Agents/<agent-name>.md .claude/agents/
+```
 
 ### Verify
 
-Inside Claude Code, type `/` and you should see the skill listed.
+Inside Claude Code, type `/` to see installed skills, or ask Claude to list available agents.
 
 ---
 
-## Using a skill
+## Using
 
-In a Claude Code session, invoke a skill by name:
+### Skills
+
+Invoke a skill by name in a Claude Code session:
 
 ```
 /<skill-name>
 ```
 
-Or simply describe the task in natural language — Claude Code will trigger the relevant skill based on its `description` frontmatter.
+Or describe the task in natural language — Claude Code will trigger the relevant skill based on its `description` frontmatter.
+
+### Agents
+
+Agents are invoked by Claude Code automatically when a task matches the agent's description, or you can ask Claude to delegate explicitly (e.g. "use the security-auditor agent to review this").
 
 ---
 
-## Skill format
+## Format
+
+### Skill
 
 Each skill is a directory containing a `SKILL.md` file with YAML frontmatter:
 
@@ -73,9 +98,25 @@ model: opus
 Instructions for Claude to follow when this skill is invoked...
 ```
 
-The `description` field is what Claude uses to decide when to load the skill, so it should clearly state the trigger conditions.
+### Agent
 
-For a full guide to authoring skills, see the [Skills section of Arantic Docs](https://github.com/aranticlabs/arantic-docs).
+Each agent is a single Markdown file with YAML frontmatter:
+
+```markdown
+---
+name: agent-name
+description: When Claude Code should delegate to this agent.
+tools: [...]
+---
+
+# Agent Name
+
+System prompt and instructions for the agent...
+```
+
+The `description` field on both agents and skills is what Claude uses to decide when to invoke them, so it should clearly state the trigger conditions.
+
+For a full guide to authoring agents and skills, see [Arantic Docs](https://github.com/aranticlabs/arantic-docs).
 
 ---
 
